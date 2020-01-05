@@ -210,7 +210,7 @@ class Join(kp.Plugin):
         self.disabled_suggestions = []
 
         settings = self.load_settings()
-        self.api_key = settings.get("api_key", section=self.SECTION_MAIN)
+        self.api_key = settings.get("api_key", section=self.SECTION_MAIN, fallback='')
         self.tts_language = settings.get("tts_language", section=self.SECTION_MAIN, fallback='EN')
         self.device_groups = settings.get("device_groups", section=self.SECTION_MAIN, fallback='').split(',')
         disabled_suggestions = settings.get("disabled_actions", section=self.SECTION_MAIN, fallback='').split(',')
@@ -236,8 +236,8 @@ class Join(kp.Plugin):
             for i in self.device_groups:
                 if i:
                     devices.append({'deviceId': i.strip(), 'deviceName': i.strip()})
-        except (TypeError, AttributeError) as e:
-            self.err("Please register at least one device with Join", e)
+        except (TypeError, AttributeError):
+            self.err("Please register at least one device with Join")
 
         return devices
 
